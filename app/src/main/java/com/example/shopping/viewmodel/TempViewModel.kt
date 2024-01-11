@@ -1,4 +1,4 @@
-package com.example.presentation.viewmodel
+package com.example.shopping.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.domain.model.TempModel

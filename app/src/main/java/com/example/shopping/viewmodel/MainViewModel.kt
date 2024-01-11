@@ -1,4 +1,4 @@
-package com.example.presentation.viewmodel
+package com.example.shopping.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

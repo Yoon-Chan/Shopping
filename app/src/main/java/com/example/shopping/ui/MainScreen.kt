@@ -1,4 +1,4 @@
-package com.example.presentation.ui
+package com.example.shopping.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
@@ -26,8 +26,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.presentation.ui.theme.ShoppingTheme
-import com.example.presentation.viewmodel.MainViewModel
+import com.example.shopping.viewmodel.MainViewModel
+import com.example.shopping.ui.theme.ShoppingTheme
 
 sealed class MainNavigationItem(val route: String, val name: String, val icon: ImageVector) {
     data object Main : MainNavigationItem("Main", "Main", Icons.Default.Home)

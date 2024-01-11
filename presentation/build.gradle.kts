@@ -62,7 +62,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
     implementation(project(":domain"))
-    //implementation(project(":app"))
+    implementation(project(":app"))
     //implementation(project(":data"))
 
     //hilt
