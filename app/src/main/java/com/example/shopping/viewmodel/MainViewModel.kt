@@ -3,6 +3,9 @@ package com.example.shopping.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.Banner
+import com.example.domain.model.BannerList
+import com.example.domain.model.Product
 import com.example.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +31,22 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _columnCount.emit(count)
         }
+    }
+
+    fun openProduct(product: Product){
+
+    }
+
+    fun openCarousel(product: Product){
+
+    }
+
+    fun openBanner(banner: Banner){
+
+    }
+
+    fun openBannerList(banner: BannerList){
+
     }
 
     companion object {

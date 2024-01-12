@@ -66,7 +66,7 @@ fun ProductCard(product: Product, onClick: (Product) -> Unit) {
 }
 
 @Composable
-private fun Price(product: Product) {
+fun Price(product: Product) {
     when (product.price.salesStatus) {
         "ON_SALE" -> {
             Text(

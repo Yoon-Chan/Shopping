@@ -1,9 +1,7 @@
 package com.example.shopping.ui.component
 
-import android.view.MotionEvent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,32 +11,31 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintSet.Motion
 import com.example.domain.model.BannerList
 import com.example.shopping.R
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
-fun BannerListCard(model :BannerList){
+fun BannerListCard(model: BannerList, onClick: (BannerList) -> Unit) {
     val pagerState = rememberPagerState {
         model.imageList.size
     }
-    LaunchedEffect(key1 = pagerState){
+    LaunchedEffect(key1 = pagerState) {
         autoScrollInfinity(pagerState = pagerState)
     }
 
@@ -48,14 +45,18 @@ fun BannerListCard(model :BannerList){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .shadow(10.dp)
+                .shadow(10.dp),
+            onClick = { onClick(model) }
         ) {
             Box(
                 contentAlignment = Alignment.TopEnd,
-                modifier = Modifier.fillMaxWidth()) {
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(text = "pageNumber : $it")
             }
-            Image(painter = painterResource(id = R.drawable.product_image), contentDescription = "description",
+            Image(
+                painter = painterResource(id = R.drawable.product_image),
+                contentDescription = "description",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,7 +68,7 @@ fun BannerListCard(model :BannerList){
 
 @OptIn(ExperimentalFoundationApi::class)
 private suspend fun autoScrollInfinity(pagerState: PagerState) {
-    while (true){
+    while (true) {
         delay(3000)
         val currentPage = pagerState.currentPage
         pagerState.animateScrollToPage((currentPage + 1) % pagerState.pageCount)
