@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +47,6 @@ fun ProductCard(product: Product, onClick: (Product) -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(320.dp)
                 .padding(8.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
@@ -55,7 +56,8 @@ fun ProductCard(product: Product, onClick: (Product) -> Unit) {
                 contentDescription = "product_image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentWidth(Alignment.End)
+                    .aspectRatio(1f),
+                contentScale = ContentScale.Crop
             )
 
             Text(fontSize = 14.sp, fontWeight = FontWeight.SemiBold, text = product.shop.shopName)
@@ -71,16 +73,15 @@ private fun Price(product: Product) {
         "ON_SALE" -> {
             Text(
                 fontSize = 14.sp,
-                text = "${product.price.originPrice}",
+                text = "${product.price.originPrice}원",
                 style = TextStyle(textDecoration = TextDecoration.LineThrough)
             )
             Row {
                 Text(text = "할인가: ", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text(
-                    text = "${product.price.finalPrice}",
+                    text = "${product.price.finalPrice}원",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Purple80
                 )
             }
         }
