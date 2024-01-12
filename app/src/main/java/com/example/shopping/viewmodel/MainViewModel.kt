@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Banner
 import com.example.domain.model.BannerList
 import com.example.domain.model.Product
+import com.example.domain.model.Ranking
 import com.example.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +47,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun openBannerList(banner: BannerList){
+
+    }
+
+    fun openRankingProduct(ranking: Product){
 
     }
 

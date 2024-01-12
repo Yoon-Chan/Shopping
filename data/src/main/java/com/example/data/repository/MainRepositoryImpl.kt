@@ -18,7 +18,7 @@ class MainRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : MainRepository {
     override fun getModelList(): Flow<List<BaseModel>> = flow {
-        val inputStream = context.assets.open("product_list.json")
+        val inputStream = context.assets.open("product_list2.json")
         val inputStreamReader = InputStreamReader(inputStream)
         val jsonString = inputStreamReader.readText()
         val type = object : TypeToken<List<BaseModel>>() {}.type

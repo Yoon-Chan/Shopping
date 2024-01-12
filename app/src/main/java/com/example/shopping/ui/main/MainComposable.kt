@@ -11,10 +11,12 @@ import com.example.domain.model.BannerList
 import com.example.domain.model.Carousel
 import com.example.domain.model.ModelType
 import com.example.domain.model.Product
+import com.example.domain.model.Ranking
 import com.example.shopping.ui.component.BannerCard
 import com.example.shopping.ui.component.BannerListCard
 import com.example.shopping.ui.component.CarouselCard
 import com.example.shopping.ui.component.ProductCard
+import com.example.shopping.ui.component.RankingCard
 import com.example.shopping.viewmodel.MainViewModel
 
 
@@ -53,6 +55,11 @@ fun MainInsideScreen(viewModel: MainViewModel) {
                         viewModel.openCarousel(product = product)
                     }
                 }
+                is Ranking -> {
+                    RankingCard(model = item) { ranking ->
+                        viewModel.openRankingProduct(ranking)
+                    }
+                }
             }
         }
     }
@@ -64,7 +71,7 @@ private fun getSpanCountByType(type: ModelType, defaultColumnCount: Int): Int {
             1
         }
 
-        ModelType.BANNER, ModelType.BANNER_LIST, ModelType.CAROUSEL -> {
+        ModelType.BANNER, ModelType.BANNER_LIST, ModelType.CAROUSEL, ModelType.RANKING -> {
             defaultColumnCount
         }
     }
