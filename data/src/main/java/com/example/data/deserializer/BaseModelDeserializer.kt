@@ -1,6 +1,7 @@
 package com.example.data.deserializer
 
 import com.example.domain.model.Banner
+import com.example.domain.model.BannerList
 import com.example.domain.model.BaseModel
 import com.example.domain.model.ModelType
 import com.example.domain.model.Product
@@ -30,6 +31,9 @@ class BaseModelDeserializer: JsonDeserializer<BaseModel> {
             }
             ModelType.PRODUCT -> {
                 gson.fromJson(root, Product::class.java)
+            }
+            ModelType.BANNER_LIST -> {
+                gson.fromJson(root, BannerList::class.java)
             }
         }
     }
