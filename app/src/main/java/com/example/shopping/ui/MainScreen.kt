@@ -1,6 +1,8 @@
 package com.example.shopping.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -18,6 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.shopping.ui.main.MainInsideScreen
 import com.example.shopping.viewmodel.MainViewModel
 import com.example.shopping.ui.theme.ShoppingTheme
 
@@ -48,16 +52,19 @@ fun DefaultPreview() {
 @Composable
 fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
-
     Scaffold(
         topBar = {
             Header(viewModel)
+
         },
         bottomBar = {
             MainBottomNavigationBar(navController)
+
         }
     ) {
-        MainNavigationScreen(navController)
+        Column(modifier = Modifier.padding(it)) {
+            MainNavigationScreen(viewModel, navController)
+        }
     }
 }
 
@@ -117,10 +124,10 @@ fun MainBottomNavigationBar(navController: NavHostController) {
 
 
 @Composable
-fun MainNavigationScreen(navController: NavHostController) {
+fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostController) {
     NavHost(navController = navController, startDestination = MainNavigationItem.Main.route) {
         composable(MainNavigationItem.Main.route) {
-            Text(text = "Hello Main")
+            MainInsideScreen(viewModel)
         }
         composable(MainNavigationItem.Category.route) {
             Text(text = "Hello Category")

@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.Category
 import com.example.domain.model.Product
-import com.example.domain.model.SalesStatus
 import com.example.domain.model.Shop
 import com.example.shopping.R
 import com.example.shopping.ui.theme.Purple80
@@ -69,7 +68,7 @@ fun ProductCard(product: Product, onClick: (Product) -> Unit) {
 @Composable
 private fun Price(product: Product) {
     when (product.price.salesStatus) {
-        SalesStatus.ON_SALE -> {
+        "ON_SALE" -> {
             Text(
                 fontSize = 14.sp,
                 text = "${product.price.originPrice}",
@@ -86,7 +85,7 @@ private fun Price(product: Product) {
             }
         }
 
-        SalesStatus.NORMAL -> {
+        "ON_DISCOUNT" -> {
             Text(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -94,7 +93,7 @@ private fun Price(product: Product) {
             )
         }
 
-        SalesStatus.SOLD_OUT -> {
+        "SOLD_OUT" -> {
             Text(text = "판매 종료", fontSize = 18.sp, color = Color(0xFF666666))
         }
     }
@@ -106,7 +105,7 @@ fun PreviewProductCard() {
     ProductCard(product = Product(
         "1",
         "상품 이름",
-        price = Price(3000, 3000, SalesStatus.NORMAL),
+        price = Price(3000, 3000, "ON_SALE"),
         category = Category.Top,
         shop = Shop("1", "shopName", "shopUrl"),
         imageUrl = "imageUrl",
@@ -124,7 +123,7 @@ fun PreviewProductCardDiscount() {
     ProductCard(product = Product(
         "1",
         "상품 이름",
-        price = Price(3000, 3000, SalesStatus.ON_SALE),
+        price = Price(3000, 3000,"ON_DISCOUNT"),
         category = Category.Top,
         shop = Shop("1", "shopName", "shopUrl"),
         imageUrl = "imageUrl",
@@ -141,7 +140,7 @@ fun PreviewProductCardSoldOut() {
     ProductCard(product = Product(
         "1",
         "상품 이름",
-        price = Price(3000, 3000, SalesStatus.SOLD_OUT),
+        price = Price(3000, 3000, "SOLD_OUT"),
         category = Category.Top,
         shop = Shop("1", "shopName", "shopUrl"),
         imageUrl = "imageUrl",

@@ -3,7 +3,6 @@ package com.example.data.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.data.db.converter.BasketConverter
 import com.example.data.db.converter.LikeConverter
 import com.example.domain.model.Category
 import com.example.domain.model.Price

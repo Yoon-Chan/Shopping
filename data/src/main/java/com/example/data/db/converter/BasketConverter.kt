@@ -38,4 +38,5 @@ class BasketConverter {
     fun toShop(value: String): Shop {
         return gson.fromJson(value, Shop::class.java)
     }
+
 }
