@@ -29,7 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.shopping.ui.main.MainInsideScreen
+import com.example.shopping.ui.main.CategoryScreen
+import com.example.shopping.ui.main.HomeInsideScreen
 import com.example.shopping.viewmodel.MainViewModel
 import com.example.shopping.ui.theme.ShoppingTheme
 
@@ -44,13 +45,13 @@ sealed class MainNavigationItem(val route: String, val name: String, val icon: I
 @Composable
 fun DefaultPreview() {
     ShoppingTheme {
-        MainScreen()
+        HomeScreen()
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     Scaffold(
         topBar = {
@@ -127,10 +128,10 @@ fun MainBottomNavigationBar(navController: NavHostController) {
 fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostController) {
     NavHost(navController = navController, startDestination = MainNavigationItem.Main.route) {
         composable(MainNavigationItem.Main.route) {
-            MainInsideScreen(viewModel)
+            HomeInsideScreen(viewModel)
         }
         composable(MainNavigationItem.Category.route) {
-            Text(text = "Hello Category")
+            CategoryScreen(viewModel = viewModel)
         }
         composable(MainNavigationItem.MyPage.route) {
             Text(text = "Hello Settings")

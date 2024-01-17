@@ -1,7 +1,9 @@
 package com.example.shopping.di
 
+import com.example.data.repository.CategoryRepositoryImpl
 import com.example.data.repository.MainRepositoryImpl
 import com.example.data.repository.TempRepositoryImpl
+import com.example.domain.repository.CategoryRepository
 import com.example.domain.repository.MainRepository
 import com.example.domain.repository.TempRepository
 import dagger.Binds
@@ -21,4 +23,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindMainRepository(mainRepositoryImpl: MainRepositoryImpl): MainRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCategoryRepository(categoryRepositoryImpl: CategoryRepositoryImpl): CategoryRepository
 }

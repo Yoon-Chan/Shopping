@@ -21,7 +21,7 @@ import com.example.shopping.viewmodel.MainViewModel
 
 
 @Composable
-fun MainInsideScreen(viewModel: MainViewModel) {
+fun HomeInsideScreen(viewModel: MainViewModel) {
     val modelList by viewModel.modelList.collectAsState(initial = emptyList())
     val columnCount by viewModel.columnCount.collectAsState()
 
