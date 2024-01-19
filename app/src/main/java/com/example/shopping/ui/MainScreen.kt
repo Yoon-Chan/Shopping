@@ -28,9 +28,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.domain.model.Category
+import com.example.domain.model.Product
 import com.example.shopping.ui.category.CategoryScreen
 import com.example.shopping.ui.main.MainCategoryScreen
 import com.example.shopping.ui.main.MainHomeInsideScreen
+import com.example.shopping.ui.product_detail.ProductDetailScreen
 import com.example.shopping.viewmodel.MainViewModel
 import com.example.shopping.ui.theme.ShoppingTheme
 import com.google.gson.Gson
@@ -130,7 +132,7 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
 fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostController) {
     NavHost(navController = navController, startDestination = NavigationRouteName.MAIN_HOME) {
         composable(NavigationRouteName.MAIN_HOME) {
-            MainHomeInsideScreen(viewModel)
+            MainHomeInsideScreen(navController, viewModel)
         }
         composable(NavigationRouteName.MAIN_CATEGORY) {
             MainCategoryScreen(viewModel = viewModel, navController = navController)
@@ -144,8 +146,17 @@ fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostControl
         ) {
             val categoryString = it.arguments?.getString("category")
             val category = Gson().fromJson(categoryString, Category::class.java)
-            if(category != null){
-                CategoryScreen(category = category)
+            if (category != null) {
+                CategoryScreen(navHostController = navController, category = category)
+            }
+        }
+        composable(
+            NavigationRouteName.PRODUCT_DETAIL + "/{product}",
+            arguments = listOf(navArgument("product") { type = NavType.StringType })
+        ) {
+            val productString = it.arguments?.getString("product")
+            if (productString != null) {
+                ProductDetailScreen(productString)
             }
         }
     }

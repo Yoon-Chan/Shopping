@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.domain.model.Product
 import com.example.domain.model.Ranking
 import com.example.shopping.R
@@ -26,7 +27,7 @@ import com.example.shopping.model.RankingVM
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun RankingCard(presentationVM: RankingVM) {
+fun RankingCard(navHostController: NavHostController, presentationVM: RankingVM) {
     val pageCount = presentationVM.model.productList.size / DEFAULT_RANKING_ITEM_COUNT
     val pagerState = rememberPagerState {
         pageCount
@@ -44,7 +45,7 @@ fun RankingCard(presentationVM: RankingVM) {
                         rank + it,
                         presentationVM.model.productList[rank + it],
                         onClick = {product ->
-                            presentationVM.openRankingProduct(product)
+                            presentationVM.openRankingProduct(navHostController,product)
                         }
                     )
                 }
