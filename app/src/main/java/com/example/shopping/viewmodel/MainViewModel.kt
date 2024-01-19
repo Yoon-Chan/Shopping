@@ -3,11 +3,15 @@ package com.example.shopping.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.domain.model.Banner
 import com.example.domain.model.BannerList
+import com.example.domain.model.Category
 import com.example.domain.model.Product
 import com.example.domain.usecase.CategoryUseCase
 import com.example.domain.usecase.MainUseCase
+import com.example.shopping.ui.NavigationRouteName
+import com.example.shopping.utils.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,6 +58,10 @@ class MainViewModel @Inject constructor(
 
     fun openRankingProduct(ranking: Product){
 
+    }
+
+    fun openCategory(navHostController: NavHostController, category: Category){
+        NavigationUtils.navigate(navHostController, NavigationRouteName.CATEGORY, category)
     }
 
     companion object {

@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,10 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.shopping.viewmodel.MainViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryScreen(viewModel: MainViewModel) {
+fun MainCategoryScreen(viewModel: MainViewModel, navController: NavHostController) {
     val categories by viewModel.categoryList.collectAsState(initial = emptyList())
 
     LazyVerticalGrid(columns = GridCells.Fixed(3)) {
@@ -31,7 +34,10 @@ fun CategoryScreen(viewModel: MainViewModel) {
                     .fillMaxWidth()
                     .height(100.dp)
                     .padding(10.dp)
-                    .shadow(10.dp)
+                    .shadow(10.dp),
+                onClick = {
+                    viewModel.openCategory(navController, categories[it])
+                }
             ) {
                 Text(
                     text = "${categories[it].categoryName}",
