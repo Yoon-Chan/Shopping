@@ -1,8 +1,6 @@
 package com.example.shopping.ui.component
 
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,22 +17,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.model.Carousel
 import com.example.domain.model.Product
 import com.example.shopping.R
+import com.example.shopping.model.CarouselVM
 
 @Composable
-fun CarouselCard(model: Carousel, onClick: (Product) -> Unit) {
+fun CarouselCard(presentationVM: CarouselVM) {
     val scrollState = rememberLazyListState()
     Column {
         Text(
-            text = model.title,
+            text = presentationVM.model.title,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(10.dp)
@@ -45,8 +42,13 @@ fun CarouselCard(model: Carousel, onClick: (Product) -> Unit) {
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            items(model.productList.size) {
-                CarouselProductCard(product = model.productList[it], onClick = onClick)
+            items(presentationVM.model.productList.size) {
+                CarouselProductCard(
+                    product = presentationVM.model.productList[it],
+                    onClick = {product ->
+                        presentationVM.openCarouselProduct(product)
+                    }
+                )
             }
         }
     }

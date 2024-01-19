@@ -1,5 +1,7 @@
 package com.example.shopping.model
 
-abstract class PresentationVM() {
+import com.example.domain.model.BaseModel
+
+sealed class PresentationVM<T: BaseModel>(val model : T) {
     //some func...
 }

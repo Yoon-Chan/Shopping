@@ -12,6 +12,11 @@ import com.example.domain.model.Carousel
 import com.example.domain.model.ModelType
 import com.example.domain.model.Product
 import com.example.domain.model.Ranking
+import com.example.shopping.model.BannerListVM
+import com.example.shopping.model.BannerVM
+import com.example.shopping.model.CarouselVM
+import com.example.shopping.model.ProductVM
+import com.example.shopping.model.RankingVM
 import com.example.shopping.ui.component.BannerCard
 import com.example.shopping.ui.component.BannerListCard
 import com.example.shopping.ui.component.CarouselCard
@@ -28,37 +33,27 @@ fun MainHomeInsideScreen(viewModel: MainViewModel) {
     LazyVerticalGrid(GridCells.Fixed(columnCount)) {
         items(modelList.size, span = { index ->
             val item = modelList[index]
-            val spanCount = getSpanCountByType(item.type, columnCount)
+            val spanCount = getSpanCountByType(item.model.type, columnCount)
             GridItemSpan(spanCount)
         }) {
             when (val item = modelList[it]) {
-                is Banner -> {
-                    BannerCard(model = item) { banner ->
-                        viewModel.openBanner(banner)
-                    }
+                is BannerVM -> {
+                    BannerCard(presentationVM = item)
                 }
 
-                is Product -> {
-                    ProductCard(product = item) { product ->
-                        viewModel.openProduct(product)
-                    }
+                is ProductVM -> {
+                    ProductCard(presentationVM = item)
                 }
 
-                is BannerList -> {
-                    BannerListCard(model = item) { bannerList ->
-                        viewModel.openBannerList(bannerList)
-                    }
+                is BannerListVM -> {
+                    BannerListCard(presentationVM = item)
                 }
 
-                is Carousel -> {
-                    CarouselCard(model = item) { product ->
-                        viewModel.openCarousel(product = product)
-                    }
+                is CarouselVM -> {
+                    CarouselCard(presentationVM = item)
                 }
-                is Ranking -> {
-                    RankingCard(model = item) { ranking ->
-                        viewModel.openRankingProduct(ranking)
-                    }
+                is RankingVM -> {
+                    RankingCard(presentationVM = item)
                 }
             }
         }

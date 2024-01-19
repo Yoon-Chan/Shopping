@@ -22,16 +22,17 @@ import androidx.compose.ui.unit.sp
 import com.example.domain.model.Product
 import com.example.domain.model.Ranking
 import com.example.shopping.R
+import com.example.shopping.model.RankingVM
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun RankingCard(model: Ranking, onClick: (Product) -> Unit) {
-    val pageCount = model.productList.size / DEFAULT_RANKING_ITEM_COUNT
+fun RankingCard(presentationVM: RankingVM) {
+    val pageCount = presentationVM.model.productList.size / DEFAULT_RANKING_ITEM_COUNT
     val pagerState = rememberPagerState {
         pageCount
     }
     Column {
-        Text(model.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        Text(presentationVM.model.title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         HorizontalPager(
             state = pagerState,
             contentPadding = PaddingValues(end = 50.dp)
@@ -41,8 +42,10 @@ fun RankingCard(model: Ranking, onClick: (Product) -> Unit) {
                 repeat(DEFAULT_RANKING_ITEM_COUNT){
                     RankingProductCard(
                         rank + it,
-                        model.productList[rank + it],
-                        onClick = onClick
+                        presentationVM.model.productList[rank + it],
+                        onClick = {product ->
+                            presentationVM.openRankingProduct(product)
+                        }
                     )
                 }
             }

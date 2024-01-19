@@ -24,16 +24,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.BannerList
 import com.example.shopping.R
+import com.example.shopping.model.BannerListVM
 import kotlinx.coroutines.delay
 
 @OptIn(
-    ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun BannerListCard(model: BannerList, onClick: (BannerList) -> Unit) {
+fun BannerListCard(presentationVM: BannerListVM) {
     val pagerState = rememberPagerState {
-        model.imageList.size
+        presentationVM.model.imageList.size
     }
     LaunchedEffect(key1 = pagerState) {
         autoScrollInfinity(pagerState = pagerState)
@@ -46,7 +47,7 @@ fun BannerListCard(model: BannerList, onClick: (BannerList) -> Unit) {
                 .fillMaxWidth()
                 .padding(10.dp)
                 .shadow(10.dp),
-            onClick = { onClick(model) }
+            onClick = { presentationVM.openBannerList(presentationVM.model.bannerId) }
         ) {
             Box(
                 contentAlignment = Alignment.TopEnd,

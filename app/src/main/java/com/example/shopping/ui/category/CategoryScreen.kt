@@ -27,9 +27,7 @@ fun CategoryScreen(
 
     LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(10.dp)) {
         items(products.size) {
-            ProductCard(product = products[it]) {product ->
-                viewModel.openProduct(product)
-            }
+            ProductCard(presentationVM = products[it])
         }
     }
 }
