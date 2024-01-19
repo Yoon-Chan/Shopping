@@ -28,11 +28,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.domain.model.Category
-import com.example.domain.model.Product
 import com.example.shopping.ui.category.CategoryScreen
 import com.example.shopping.ui.main.MainCategoryScreen
 import com.example.shopping.ui.main.MainHomeInsideScreen
 import com.example.shopping.ui.product_detail.ProductDetailScreen
+import com.example.shopping.ui.search.SearchScreen
 import com.example.shopping.viewmodel.MainViewModel
 import com.example.shopping.ui.theme.ShoppingTheme
 import com.google.gson.Gson
@@ -60,7 +60,9 @@ fun HomeScreen(viewModel: MainViewModel = hiltViewModel()) {
     val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
         topBar = {
-            Header(viewModel)
+            if(NavigationItem.MainNav.isMainRoute(currentRoute)){
+                MainHeader(navController, viewModel)
+            }
 
         },
         bottomBar = {
@@ -78,12 +80,12 @@ fun HomeScreen(viewModel: MainViewModel = hiltViewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Header(mainViewModel: MainViewModel) {
+fun MainHeader(navController: NavHostController, mainViewModel: MainViewModel) {
     TopAppBar(
         title = { Text(text = "My App") },
         actions = {
             IconButton(onClick = {
-                mainViewModel.openSearchForm()
+                mainViewModel.openSearchForm(navController)
             }) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "SearchIcon")
             }
@@ -158,6 +160,11 @@ fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostControl
             if (productString != null) {
                 ProductDetailScreen(productString)
             }
+        }
+        composable(
+            NavigationRouteName.SEARCH
+        ){
+            SearchScreen(navHostController = navController)
         }
     }
 

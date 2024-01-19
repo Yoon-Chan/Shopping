@@ -1,6 +1,7 @@
 package com.example.shopping.viewmodel.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.domain.model.Product
 import com.example.domain.model.SearchKeyword
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +26,11 @@ class SearchViewModel @Inject constructor(
     val searchResult: StateFlow<List<ProductVM>> = _searchResult.asStateFlow()
     val searchKeywords = useCase.getSearchKeywords()
 
-    suspend fun search(keyword: String) {
-        useCase.search(SearchKeyword(keyword)).collectLatest {
-            _searchResult.emit(it.map(::convertToProductVM))
+    fun search(keyword: String) {
+        viewModelScope.launch {
+            useCase.search(SearchKeyword(keyword)).collectLatest {
+                _searchResult.emit(it.map(::convertToProductVM))
+            }
         }
     }
 
