@@ -12,7 +12,7 @@ class ProductDetailRepositoryImpl @Inject constructor(
 ) : ProductDetailRepository {
 
     override fun getProductDetail(productId: String): Flow<Product> {
-        return dataSource.getProducts().map { products ->
+        return dataSource.getHomeComponents().map { products ->
             products.filterIsInstance<Product>().first { it.productId == productId }
         }
     }

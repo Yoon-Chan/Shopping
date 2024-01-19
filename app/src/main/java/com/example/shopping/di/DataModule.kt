@@ -3,10 +3,12 @@ package com.example.shopping.di
 import com.example.data.repository.CategoryRepositoryImpl
 import com.example.data.repository.MainRepositoryImpl
 import com.example.data.repository.ProductDetailRepositoryImpl
+import com.example.data.repository.SearchRepositoryImpl
 import com.example.data.repository.TempRepositoryImpl
 import com.example.domain.repository.CategoryRepository
 import com.example.domain.repository.MainRepository
 import com.example.domain.repository.ProductDetailRepository
+import com.example.domain.repository.SearchRepository
 import com.example.domain.repository.TempRepository
 import dagger.Binds
 import dagger.Module
@@ -33,4 +35,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindProductDetailRepository(productDetailRepository: ProductDetailRepositoryImpl) : ProductDetailRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchRepository(searchRepositoryImpl: SearchRepositoryImpl) : SearchRepository
 }

@@ -5,18 +5,25 @@ import androidx.room.RoomDatabase
 import com.example.data.db.dao.BasketDao
 import com.example.data.db.dao.LikeDao
 import com.example.data.db.dao.PurchaseDao
+import com.example.data.db.dao.SearchDao
 import com.example.data.db.entity.BasketProductEntity
 import com.example.data.db.entity.LikeProductEntity
 import com.example.data.db.entity.PurchaseProductEntity
+import com.example.data.db.entity.SearchKeywordEntity
 
-@Database(entities = [BasketProductEntity::class, LikeProductEntity::class, PurchaseProductEntity::class], version = 1)
+@Database(
+    entities = [BasketProductEntity::class, LikeProductEntity::class, PurchaseProductEntity::class, SearchKeywordEntity::class],
+    version = 1
+)
 abstract class ApplicationDatabase : RoomDatabase() {
 
     companion object {
         const val DB_NAME = "ApplicationDatabase.db"
     }
 
-    abstract fun purchaseDao() : PurchaseDao
-    abstract fun likeDao() : LikeDao
-    abstract fun basketDao() : BasketDao
+    abstract fun purchaseDao(): PurchaseDao
+    abstract fun likeDao(): LikeDao
+    abstract fun basketDao(): BasketDao
+
+    abstract fun searchDao(): SearchDao
 }
