@@ -22,16 +22,16 @@ class SearchManager {
         var minPrice = Int.MAX_VALUE
         var maxPrice = Int.MIN_VALUE
 
-        searchResult.forEach {
-            if (!categories.contains(it.category)) {
-                categories.add(it.category)
+        searchResult.forEach { product ->
+            if (categories.find { it.categoryId == product.category.categoryId } == null) {
+                categories.add(product.category)
             }
-            minPrice = min(minPrice, it.price.finalPrice)
-            maxPrice = max(maxPrice, it.price.finalPrice)
+            minPrice = min(minPrice, product.price.finalPrice)
+            maxPrice = max(maxPrice, product.price.finalPrice)
         }
         _filters.emit(
             listOf(
-                SearchFilter.PriceFilter(minPrice to maxPrice),
+                SearchFilter.PriceFilter(minPrice.toFloat() to maxPrice.toFloat()),
                 SearchFilter.CategoryFilter(categories)
             )
         )
@@ -42,14 +42,20 @@ class SearchManager {
         val currentFilter = filters.value
 
         _filters.emit(currentFilter.map {
-            if(it is SearchFilter.PriceFilter && filter is SearchFilter.PriceFilter){
+            if (it is SearchFilter.PriceFilter && filter is SearchFilter.PriceFilter) {
                 it.selectedRange = filter.selectedRange
             }
-            if(it is SearchFilter.CategoryFilter && filter is SearchFilter.CategoryFilter){
+            if (it is SearchFilter.CategoryFilter && filter is SearchFilter.CategoryFilter) {
                 it.selectedCategory = filter.selectedCategory
             }
             it
         })
+    }
+
+    fun clearFilter() {
+        filters.value.forEach {
+            it.clear()
+        }
     }
 
     fun currentFilters(): List<SearchFilter> = filters.value
