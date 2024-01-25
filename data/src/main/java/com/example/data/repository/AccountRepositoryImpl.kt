@@ -13,7 +13,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     private val accountInfoFlow = MutableStateFlow(preferenceDataSource.getAccountInfo())
 
-    override suspend fun signInGoogle(accountInfo: AccountInfo) {
+    override suspend fun signIn(accountInfo: AccountInfo) {
         preferenceDataSource.putAccountInfo(accountInfo)
         accountInfoFlow.emit(accountInfo)
     }
@@ -22,7 +22,7 @@ class AccountRepositoryImpl @Inject constructor(
         return accountInfoFlow
     }
 
-    override suspend fun signOutGoogle() {
+    override suspend fun signOut() {
         preferenceDataSource.removeAccountInfo()
         accountInfoFlow.emit(null)
     }

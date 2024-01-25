@@ -18,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,6 +29,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 
 @Composable
 fun MyPageScreen(viewModel: MainViewModel, googleSignInClient: GoogleSignInClient) {
@@ -45,6 +48,17 @@ fun MyPageScreen(viewModel: MainViewModel, googleSignInClient: GoogleSignInClien
                 val task: Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(indent)
                 handleSIgnInResult(context, task, viewModel, firebaseAuth)
+            }
+        }
+    }
+    val kakaoCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        when {
+            error != null -> {
+                Log.d("Kakao", "카카오톡 계정 로그인 실패", error)
+            }
+
+            token != null -> {
+                loginWithKakaoNickName(viewModel, token)
             }
         }
     }
@@ -66,8 +80,17 @@ fun MyPageScreen(viewModel: MainViewModel, googleSignInClient: GoogleSignInClien
                 )
 
                 Button(onClick = {
-                    viewModel.signOutGoogle()
-                    firebaseAuth.signOut()
+                    viewModel.signOut()
+                    accountInfo?.type?.let { type ->
+                        when (type) {
+                            AccountInfo.Type.KAKAO -> {
+                                UserApiClient.instance.logout {  }
+                            }
+                            AccountInfo.Type.GOOGLE -> {
+                                firebaseAuth.signOut()
+                            }
+                        }
+                    }
                 }) {
                     Text(text = "로그아웃")
                 }
@@ -77,11 +100,57 @@ fun MyPageScreen(viewModel: MainViewModel, googleSignInClient: GoogleSignInClien
                 onClick = { startForResult.launch(googleSignInClient.signInIntent) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "로그인")
+                Text(text = "구글 로그인")
+            }
+
+            Button(
+                onClick = { loginKakao(context, kakaoCallback) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "카카오 로그인")
             }
         }
     }
+}
 
+private fun loginKakao(context: Context, callback: (OAuthToken?, Throwable?) -> Unit) {
+    if (UserApiClient.instance.isKakaoTalkLoginAvailable(context = context)) {
+        //카카오톡 설치됨
+        UserApiClient.instance.loginWithKakaoTalk(context) { token: OAuthToken?, error: Throwable? ->
+            if (error != null) {
+                Log.e("KaKao", "카카오톡 로그인 실패")
+            }
+            if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                return@loginWithKakaoTalk
+            }
+
+            UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+
+        }
+    } else {
+        //카카오톡 설치x
+        UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+    }
+}
+
+private fun loginWithKakaoNickName(viewModel: MainViewModel, token: OAuthToken) {
+    UserApiClient.instance.me { user, error ->
+        when {
+            error != null -> {
+                Log.e("Kakao", "사용자 정보 실패", error)
+            }
+
+            user != null -> {
+                viewModel.signIn(
+                    AccountInfo(
+                        token.idToken.orEmpty(),
+                        user.properties?.get("nickname").orEmpty(),
+                        AccountInfo.Type.KAKAO
+                    )
+                )
+            }
+        }
+    }
 }
 
 private fun handleSIgnInResult(
@@ -96,7 +165,7 @@ private fun handleSIgnInResult(
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    viewModel.signInGoogle(
+                    viewModel.signIn(
                         AccountInfo(
                             account.idToken.orEmpty(),
                             account.displayName.orEmpty(),
@@ -104,7 +173,7 @@ private fun handleSIgnInResult(
                         )
                     )
                 } else {
-                    viewModel.signOutGoogle()
+                    viewModel.signOut()
                     firebaseAuth.signOut()
                 }
             }

@@ -11,10 +11,10 @@ class AccountUseCase @Inject constructor(
     fun getAccountInfo(): StateFlow<AccountInfo?> = accountRepository.getAccountInfo()
 
     suspend fun signInGoogle(accountInfo: AccountInfo){
-        accountRepository.signInGoogle(accountInfo)
+        accountRepository.signIn(accountInfo)
     }
 
-    suspend fun signOutGoogle() {
-        accountRepository.signOutGoogle()
+    suspend fun signOut() {
+        accountRepository.signOut()
     }
 }

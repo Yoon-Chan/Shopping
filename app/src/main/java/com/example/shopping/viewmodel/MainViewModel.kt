@@ -1,6 +1,5 @@
 package com.example.shopping.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -47,15 +46,15 @@ class MainViewModel @Inject constructor(
     val categoryList = categoryUseCase.getCategories()
     val accountInfo = accountUseCase.getAccountInfo()
 
-    fun signInGoogle(accountInfo: AccountInfo){
+    fun signIn(accountInfo: AccountInfo){
         viewModelScope.launch {
             accountUseCase.signInGoogle(accountInfo)
         }
     }
 
-    fun signOutGoogle() {
+    fun signOut() {
         viewModelScope.launch {
-            accountUseCase.signOutGoogle()
+            accountUseCase.signOut()
         }
     }
 
