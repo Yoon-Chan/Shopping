@@ -31,10 +31,12 @@ import com.example.domain.model.Category
 import com.example.shopping.ui.category.CategoryScreen
 import com.example.shopping.ui.main.MainCategoryScreen
 import com.example.shopping.ui.main.MainHomeInsideScreen
+import com.example.shopping.ui.main.MyPageScreen
 import com.example.shopping.ui.product_detail.ProductDetailScreen
 import com.example.shopping.ui.search.SearchScreen
 import com.example.shopping.viewmodel.MainViewModel
 import com.example.shopping.ui.theme.ShoppingTheme
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.gson.Gson
 
 //sealed class MainNavigationItem(val route: String, val name: String, val icon: ImageVector) {
@@ -44,17 +46,17 @@ import com.google.gson.Gson
 //}
 
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
-@Composable
-fun DefaultPreview() {
-    ShoppingTheme {
-        HomeScreen()
-    }
-}
+//@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
+//@Composable
+//fun DefaultPreview() {
+//    ShoppingTheme {
+//        HomeScreen()
+//    }
+//}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun HomeScreen(googleSignInClient: GoogleSignInClient,viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -73,7 +75,7 @@ fun HomeScreen(viewModel: MainViewModel = hiltViewModel()) {
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            MainNavigationScreen(viewModel, navController)
+            MainNavigationScreen(viewModel, navController, googleSignInClient)
         }
     }
 }
@@ -131,7 +133,7 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
 
 
 @Composable
-fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostController) {
+fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostController, googleSignInClient: GoogleSignInClient) {
     NavHost(navController = navController, startDestination = NavigationRouteName.MAIN_HOME) {
         composable(NavigationRouteName.MAIN_HOME) {
             MainHomeInsideScreen(navController, viewModel)
@@ -140,7 +142,7 @@ fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostControl
             MainCategoryScreen(viewModel = viewModel, navController = navController)
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
-            Text(text = "Hello Settings")
+            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient)
         }
         composable(
             NavigationRouteName.CATEGORY + "/{category}",

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.domain.model.AccountInfo
 import com.example.domain.model.Banner
 import com.example.domain.model.BannerList
 import com.example.domain.model.BaseModel
@@ -11,6 +12,7 @@ import com.example.domain.model.Carousel
 import com.example.domain.model.Category
 import com.example.domain.model.Product
 import com.example.domain.model.Ranking
+import com.example.domain.usecase.AccountUseCase
 import com.example.domain.usecase.CategoryUseCase
 import com.example.domain.usecase.MainUseCase
 import com.example.shopping.delegate.BannerDelegate
@@ -35,6 +37,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     mainUseCase: MainUseCase,
     categoryUseCase: CategoryUseCase,
+    private val accountUseCase: AccountUseCase,
 ) : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
 
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
@@ -42,6 +45,19 @@ class MainViewModel @Inject constructor(
 
     val modelList = mainUseCase.getModelList().map(::convertToPresentationVM)
     val categoryList = categoryUseCase.getCategories()
+    val accountInfo = accountUseCase.getAccountInfo()
+
+    fun signInGoogle(accountInfo: AccountInfo){
+        viewModelScope.launch {
+            accountUseCase.signInGoogle(accountInfo)
+        }
+    }
+
+    fun signOutGoogle() {
+        viewModelScope.launch {
+            accountUseCase.signOutGoogle()
+        }
+    }
 
     fun openSearchForm(navHostController: NavHostController) {
         NavigationUtils.navigate(navHostController, NavigationRouteName.SEARCH)
