@@ -2,6 +2,8 @@ package com.example.shopping.ui.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,8 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -44,6 +52,7 @@ fun RankingCard(navHostController: NavHostController, presentationVM: RankingVM)
                     RankingProductCard(
                         rank + it,
                         presentationVM.model.productList[rank + it],
+                        presentationVM = presentationVM,
                         onClick = {product ->
                             presentationVM.openRankingProduct(navHostController,product)
                         }
@@ -56,33 +65,47 @@ fun RankingCard(navHostController: NavHostController, presentationVM: RankingVM)
 }
 
 @Composable
-fun RankingProductCard(index: Int, model: Product, onClick: (Product) -> Unit) {
-    Row(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()
-    ) {
-        Text(text = "${index + 1}", fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 10.dp))
-        Image(
-            painter = painterResource(id = R.drawable.product_image),
-            contentDescription = "productImage",
-            contentScale = ContentScale.Crop,
+fun RankingProductCard(index: Int, model: Product,presentationVM : RankingVM ,onClick: (Product) -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        IconButton(
+            onClick = { presentationVM.likeProduct(model) },
+            modifier = Modifier.align(Alignment.BottomEnd)
+        ) {
+            Icon(
+                imageVector = if (model.isLike) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = "좋아요 이미지"
+            )
+        }
+        Row(
             modifier = Modifier
-                .width(70.dp)
-                .aspectRatio(0.7f)
-        )
-        Column(modifier = Modifier.padding(start = 10.dp)) {
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
             Text(
-                text = model.shop.shopName,
-                fontSize = 14.sp,
+                text = "${index + 1}", fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
-            Text(
-                text = model.productName,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 10.dp)
+            Image(
+                painter = painterResource(id = R.drawable.product_image),
+                contentDescription = "productImage",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(70.dp)
+                    .aspectRatio(0.7f)
+                    .clickable { onClick(model) }
             )
-            Price(product = model)
+            Column(modifier = Modifier.padding(start = 10.dp)) {
+                Text(
+                    text = model.shop.shopName,
+                    fontSize = 14.sp,
+                )
+                Text(
+                    text = model.productName,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+                Price(product = model)
+            }
         }
     }
 }

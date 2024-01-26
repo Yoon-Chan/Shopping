@@ -2,6 +2,7 @@ package com.example.shopping.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -10,8 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,32 +52,42 @@ fun ProductCard(navHostController: NavHostController, presentationVM: ProductVM)
             .height(intrinsicSize = IntrinsicSize.Max)
             .padding(8.dp)
             .shadow(elevation = 10.dp),
-        onClick = { presentationVM.openProduct(navHostController, presentationVM.model)}
-        ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.product_image),
-                contentDescription = "product_image",
+        onClick = { presentationVM.openProduct(navHostController, presentationVM.model) }
+    ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(onClick = { presentationVM.likeProduct(presentationVM.model) },
+                modifier = Modifier.align(Alignment.BottomEnd)) {
+                Icon(
+                    imageVector = if (presentationVM.model.isLike) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    contentDescription = "좋아요 이미지"
+                )
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f),
-                contentScale = ContentScale.Crop
-            )
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.product_image),
+                    contentDescription = "product_image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
+                    contentScale = ContentScale.Crop
+                )
 
-            Text(
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                text = presentationVM.model.shop.shopName
-            )
-            Text(fontSize = 14.sp, text = presentationVM.model.productName)
-            Price(product = presentationVM.model)
+                Text(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    text = presentationVM.model.shop.shopName
+                )
+                Text(fontSize = 14.sp, text = presentationVM.model.productName)
+                Price(product = presentationVM.model)
+            }
         }
+
     }
 }
 
@@ -122,11 +138,16 @@ fun PreviewProductCard() {
                 shop = Shop("1", "shopName", "shopUrl"),
                 imageUrl = "imageUrl",
                 isFreeShipping = true,
-                isNew = true
+                isNew = true,
+                isLike = true
             ),
             productDelegate = object : ProductDelegate {
                 override fun openProduct(navHostController: NavHostController, product: Product) {
 
+                }
+
+                override fun likeProduct(product: Product) {
+                    TODO("Not yet implemented")
                 }
             })
     )
@@ -138,22 +159,27 @@ fun PreviewProductCard() {
 fun PreviewProductCardDiscount() {
     ProductCard(rememberNavController(),
         presentationVM =
-    ProductVM(Product(
-        "1",
-        "상품 이름",
-        price = Price(3000, 3000, "ON_DISCOUNT"),
-        category = Category.Top,
-        shop = Shop("1", "shopName", "shopUrl"),
-        imageUrl = "imageUrl",
-        isFreeShipping = true,
-        isNew = true
-    ),
-        productDelegate = object : ProductDelegate {
-            override fun openProduct(navHostController: NavHostController,product: Product) {
+        ProductVM(Product(
+            "1",
+            "상품 이름",
+            price = Price(3000, 3000, "ON_DISCOUNT"),
+            category = Category.Top,
+            shop = Shop("1", "shopName", "shopUrl"),
+            imageUrl = "imageUrl",
+            isFreeShipping = true,
+            isNew = true,
+            isLike = false
+        ),
+            productDelegate = object : ProductDelegate {
+                override fun openProduct(navHostController: NavHostController, product: Product) {
 
+                }
+
+                override fun likeProduct(product: Product) {
+                    TODO("Not yet implemented")
+                }
             }
-        }
-    )
+        )
     )
 }
 
@@ -162,20 +188,25 @@ fun PreviewProductCardDiscount() {
 fun PreviewProductCardSoldOut() {
     ProductCard(rememberNavController(),
         presentationVM =
-    ProductVM(Product(
-        "1",
-        "상품 이름",
-        price = Price(3000, 3000, "SOLD_OUT"),
-        category = Category.Top,
-        shop = Shop("1", "shopName", "shopUrl"),
-        imageUrl = "imageUrl",
-        isFreeShipping = true,
-        isNew = true
-    ),
-        productDelegate = object : ProductDelegate {
-            override fun openProduct(navHostController: NavHostController,product: Product) {
+        ProductVM(Product(
+            "1",
+            "상품 이름",
+            price = Price(3000, 3000, "SOLD_OUT"),
+            category = Category.Top,
+            shop = Shop("1", "shopName", "shopUrl"),
+            imageUrl = "imageUrl",
+            isFreeShipping = true,
+            isNew = true,
+            isLike = true
+        ),
+            productDelegate = object : ProductDelegate {
+                override fun openProduct(navHostController: NavHostController, product: Product) {
 
+                }
+
+                override fun likeProduct(product: Product) {
+
+                }
             }
-        }
-    ))
+        ))
 }

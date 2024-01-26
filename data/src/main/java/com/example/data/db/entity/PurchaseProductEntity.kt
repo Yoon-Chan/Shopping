@@ -21,6 +21,7 @@ data class PurchaseProductEntity(
     val category: Category,
     val shop: Shop,
     val isNew: Boolean,
+    val isLike : Boolean,
     val isFreeShipping: Boolean
 )
 
@@ -33,6 +34,7 @@ fun PurchaseProductEntity.toDomainModel(): Product {
         category = category,
         shop = shop,
         isNew = isNew,
+        isLike = isLike,
         isFreeShipping = isFreeShipping
     )
 }

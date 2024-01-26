@@ -16,4 +16,8 @@ class CategoryUseCase @Inject constructor(
     fun getProductByCategory(category: Category) : Flow<List<Product>> {
         return categoryRepository.getProductsByCategory(category = category)
     }
+
+    suspend fun likeProduct(product: Product){
+        categoryRepository.likeProduct(product)
+    }
 }

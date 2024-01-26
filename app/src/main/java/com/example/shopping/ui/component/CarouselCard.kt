@@ -2,6 +2,7 @@ package com.example.shopping.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +12,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,6 +52,7 @@ fun CarouselCard(navHostController: NavHostController ,presentationVM: CarouselV
             items(presentationVM.model.productList.size) {
                 CarouselProductCard(
                     product = presentationVM.model.productList[it],
+                    presentationVM,
                     onClick = {product ->
                         presentationVM.openCarouselProduct(navHostController,product)
                     }
@@ -57,7 +64,7 @@ fun CarouselCard(navHostController: NavHostController ,presentationVM: CarouselV
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CarouselProductCard(product: Product, onClick: (Product) -> Unit) {
+private fun CarouselProductCard(product: Product,presentationVM: CarouselVM, onClick: (Product) -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -67,23 +74,34 @@ private fun CarouselProductCard(product: Product, onClick: (Product) -> Unit) {
         onClick = { onClick(product) }
 
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.product_image),
-                contentDescription = "product_image",
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                onClick = { presentationVM.likeProduct(product) },
+                modifier = Modifier.align(Alignment.BottomEnd)
+            ) {
+                Icon(
+                    imageVector = if (product.isLike) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    contentDescription = "좋아요 이미지"
+                )
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f),
-                contentScale = ContentScale.Crop
-            )
-            Text(fontSize = 14.sp, text = product.productName)
-            Price(product = product)
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.product_image),
+                    contentDescription = "product_image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f),
+                    contentScale = ContentScale.Crop
+                )
+                Text(fontSize = 14.sp, text = product.productName)
+                Price(product = product)
+            }
         }
     }
 }

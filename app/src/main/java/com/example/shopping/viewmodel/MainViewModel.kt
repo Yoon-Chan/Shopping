@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    mainUseCase: MainUseCase,
+    private val mainUseCase: MainUseCase,
     categoryUseCase: CategoryUseCase,
     private val accountUseCase: AccountUseCase,
 ) : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
@@ -89,6 +89,12 @@ class MainViewModel @Inject constructor(
                 is Banner -> BannerVM(model, this)
                 is BannerList -> BannerListVM(model, this)
             }
+        }
+    }
+
+    override fun likeProduct(product: Product) {
+        viewModelScope.launch {
+            mainUseCase.likeProduct(product)
         }
     }
 
