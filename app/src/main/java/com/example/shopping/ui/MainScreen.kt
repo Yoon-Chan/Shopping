@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.domain.model.Category
 import com.example.shopping.ui.category.CategoryScreen
+import com.example.shopping.ui.main.LikeScreen
 import com.example.shopping.ui.main.MainCategoryScreen
 import com.example.shopping.ui.main.MainHomeInsideScreen
 import com.example.shopping.ui.main.MyPageScreen
@@ -105,6 +106,7 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
     val bottomNavigationItems = listOf(
         NavigationItem.MainNav.Home,
         NavigationItem.MainNav.Category,
+        NavigationItem.MainNav.LIKE,
         NavigationItem.MainNav.MyPage,
     )
 
@@ -143,6 +145,9 @@ fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostControl
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
             MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient)
+        }
+        composable(NavigationRouteName.MAIN_LIKE) {
+            LikeScreen(navHostController = navController, viewModel = viewModel)
         }
         composable(
             NavigationRouteName.CATEGORY + "/{category}",
