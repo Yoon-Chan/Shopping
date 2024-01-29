@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.domain.model.Category
 import com.example.domain.model.Product
+import com.example.shopping.ui.NavigationRouteName.BASKET
 import com.example.shopping.ui.NavigationRouteName.CATEGORY
 import com.example.shopping.ui.NavigationRouteName.MAIN_CATEGORY
 import com.example.shopping.ui.NavigationRouteName.MAIN_HOME
@@ -25,8 +26,8 @@ sealed class NavigationItem(open val route: String) {
 
         data object LIKE : MainNav(MAIN_LIKE, "관심 목록", Icons.Default.Favorite)
         companion object {
-            fun isMainRoute(route: String?) : Boolean {
-                return when(route) {
+            fun isMainRoute(route: String?): Boolean {
+                return when (route) {
                     MAIN_HOME, MAIN_MY_PAGE, MAIN_CATEGORY, MAIN_LIKE -> true
                     else -> false
                 }
@@ -39,7 +40,9 @@ sealed class NavigationItem(open val route: String) {
 
     data class ProductDetailNav(val product: Product) : NavigationItem(PRODUCT_DETAIL)
 
-    object SearchNav : NavigationItem(SEARCH)
+    data object SearchNav : NavigationItem(SEARCH)
+
+    data object BasketNav: NavigationItem(BASKET)
 }
 
 object NavigationRouteName {
@@ -50,4 +53,5 @@ object NavigationRouteName {
     const val PRODUCT_DETAIL = "product"
     const val SEARCH = "search"
     const val MAIN_LIKE = "main_like"
+    const val BASKET = "basket"
 }

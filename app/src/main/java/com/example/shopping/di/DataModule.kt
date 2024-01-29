@@ -1,6 +1,7 @@
 package com.example.shopping.di
 
 import com.example.data.repository.AccountRepositoryImpl
+import com.example.data.repository.BasketRepositoryImpl
 import com.example.data.repository.CategoryRepositoryImpl
 import com.example.data.repository.LikeRepositoryImpl
 import com.example.data.repository.MainRepositoryImpl
@@ -8,6 +9,7 @@ import com.example.data.repository.ProductDetailRepositoryImpl
 import com.example.data.repository.SearchRepositoryImpl
 import com.example.data.repository.TempRepositoryImpl
 import com.example.domain.repository.AccountRepository
+import com.example.domain.repository.BasketRepository
 import com.example.domain.repository.CategoryRepository
 import com.example.domain.repository.LikeRepository
 import com.example.domain.repository.MainRepository
@@ -51,4 +53,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindLikeRepository(likeRepositoryImpl: LikeRepositoryImpl) : LikeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBasketRepository(basketRepositoryImpl: BasketRepositoryImpl): BasketRepository
 }

@@ -24,6 +24,7 @@ import com.example.shopping.model.CarouselVM
 import com.example.shopping.model.PresentationVM
 import com.example.shopping.model.ProductVM
 import com.example.shopping.model.RankingVM
+import com.example.shopping.ui.NavigationItem
 import com.example.shopping.ui.NavigationRouteName
 import com.example.shopping.utils.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -59,6 +60,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             accountUseCase.signOut()
         }
+    }
+
+    fun openBasket(navHostController: NavHostController) {
+        NavigationUtils.navigate(navHostController, NavigationItem.BasketNav.route)
     }
 
     fun openSearchForm(navHostController: NavHostController) {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.domain.model.Category
+import com.example.shopping.ui.basket.BasketScreen
 import com.example.shopping.ui.category.CategoryScreen
 import com.example.shopping.ui.main.LikeScreen
 import com.example.shopping.ui.main.MainCategoryScreen
@@ -91,6 +93,11 @@ fun MainHeader(navController: NavHostController, mainViewModel: MainViewModel) {
                 mainViewModel.openSearchForm(navController)
             }) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "SearchIcon")
+            }
+            IconButton(onClick = {
+                mainViewModel.openBasket(navController)
+            }) {
+                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "BasketIcon")
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -172,6 +179,9 @@ fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostControl
             NavigationRouteName.SEARCH
         ){
             SearchScreen(navHostController = navController)
+        }
+        composable(NavigationRouteName.BASKET) {
+            BasketScreen()
         }
     }
 
