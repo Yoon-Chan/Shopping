@@ -13,7 +13,7 @@ import com.example.data.db.entity.SearchKeywordEntity
 
 @Database(
     entities = [BasketProductEntity::class, LikeProductEntity::class, PurchaseProductEntity::class, SearchKeywordEntity::class],
-    version = 1
+    version = 2
 )
 abstract class ApplicationDatabase : RoomDatabase() {
 

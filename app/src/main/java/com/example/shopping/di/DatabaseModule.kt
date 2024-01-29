@@ -3,7 +3,9 @@ package com.example.shopping.di
 import android.content.Context
 import androidx.room.Room
 import com.example.data.db.ApplicationDatabase
+import com.example.data.db.dao.BasketDao
 import com.example.data.db.dao.LikeDao
+import com.example.data.db.dao.PurchaseDao
 import com.example.data.db.dao.SearchDao
 import dagger.Module
 import dagger.Provides
@@ -39,4 +41,15 @@ object DatabaseModule {
         return database.likeDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideBasketDao(database: ApplicationDatabase): BasketDao {
+        return database.basketDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePurchaseDao(database: ApplicationDatabase): PurchaseDao {
+        return database.purchaseDao()
+    }
 }
