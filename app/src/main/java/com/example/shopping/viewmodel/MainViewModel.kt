@@ -24,6 +24,7 @@ import com.example.shopping.model.CarouselVM
 import com.example.shopping.model.PresentationVM
 import com.example.shopping.model.ProductVM
 import com.example.shopping.model.RankingVM
+import com.example.shopping.ui.CategoryNav
 import com.example.shopping.ui.NavigationItem
 import com.example.shopping.ui.NavigationRouteName
 import com.example.shopping.utils.NavigationUtils
@@ -85,7 +86,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openCategory(navHostController: NavHostController, category: Category) {
-        NavigationUtils.navigate(navHostController, NavigationRouteName.CATEGORY, category)
+        NavigationUtils.navigatev2(navHostController, CategoryNav.navigateWithArg(category))
     }
 
     private fun convertToPresentationVM(list: List<BaseModel>): List<PresentationVM<out BaseModel>> {

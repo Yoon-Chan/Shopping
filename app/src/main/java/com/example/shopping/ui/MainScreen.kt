@@ -156,12 +156,24 @@ fun MainNavigationScreen(viewModel: MainViewModel, navController: NavHostControl
         composable(NavigationRouteName.MAIN_LIKE) {
             LikeScreen(navHostController = navController, viewModel = viewModel)
         }
+//        composable(
+//            NavigationRouteName.CATEGORY + "/{category}",
+//            arguments = listOf(navArgument("category") { type = NavType.StringType })
+//        ) {
+//            val categoryString = it.arguments?.getString("category")
+//            val category = Gson().fromJson(categoryString, Category::class.java)
+//            if (category != null) {
+//                CategoryScreen(navHostController = navController, category = category)
+//            }
+//        }
+
         composable(
-            NavigationRouteName.CATEGORY + "/{category}",
-            arguments = listOf(navArgument("category") { type = NavType.StringType })
+            CategoryNav.routeWithArgName(),
+            arguments = CategoryNav.arguments,
+            deepLinks = CategoryNav.deepLinks
         ) {
             val categoryString = it.arguments?.getString("category")
-            val category = Gson().fromJson(categoryString, Category::class.java)
+            val category = CategoryNav.findArgument(it)
             if (category != null) {
                 CategoryScreen(navHostController = navController, category = category)
             }
