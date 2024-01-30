@@ -33,6 +33,7 @@ import com.example.shopping.ui.main.MainCategoryScreen
 import com.example.shopping.ui.main.MainHomeInsideScreen
 import com.example.shopping.ui.main.MyPageScreen
 import com.example.shopping.ui.product_detail.ProductDetailScreen
+import com.example.shopping.ui.purchasehistory.PurchaseHistoryScreen
 import com.example.shopping.ui.search.SearchScreen
 import com.example.shopping.utils.NavigationUtils
 import com.example.shopping.viewmodel.MainViewModel
@@ -160,7 +161,7 @@ fun MainNavigationScreen(
             MainCategoryScreen(viewModel = viewModel, navController = navController)
         }
         composable(MainNav.MyPage.route,deepLinks = MainNav.MyPage.deepLinks) {
-            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient)
+            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient, navController)
         }
         composable(MainNav.Like.route, deepLinks = MainNav.Like.deepLinks) {
             LikeScreen(navHostController = navController, viewModel = viewModel)
@@ -195,6 +196,9 @@ fun MainNavigationScreen(
         }
         composable(BasketNav.route, deepLinks = BasketNav.deepLinks) {
             BasketScreen()
+        }
+        composable(PurchaseHistoryNav.route, deepLinks = PurchaseHistoryNav.deepLinks){
+            PurchaseHistoryScreen()
         }
     }
 

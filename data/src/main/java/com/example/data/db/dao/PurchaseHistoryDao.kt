@@ -17,10 +17,10 @@ interface PurchaseHistoryDao {
     suspend fun insert(item: PurchaseHistoryEntity)
 
     @Query("SELECT * FROM history WHERE id=:id")
-    suspend fun get(id: String): PurchaseHistoryEntity?
+    suspend fun get(id: Int): PurchaseHistoryEntity?
 
     @Query("DELETE FROM history WHERE id=:id")
-    suspend fun delete(id: String)
+    suspend fun delete(id: Int)
 
     @Query("DELETE FROM history")
     suspend fun deleteAll()

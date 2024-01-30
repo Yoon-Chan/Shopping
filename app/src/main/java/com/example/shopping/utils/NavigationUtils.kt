@@ -7,6 +7,7 @@ import com.example.shopping.ui.Destination
 import com.example.shopping.ui.MainNav
 import com.example.shopping.ui.NavigationRouteName
 import com.example.shopping.ui.ProductDetailNav
+import com.example.shopping.ui.PurchaseHistoryNav
 import com.example.shopping.ui.SearchNav
 
 object NavigationUtils {
@@ -36,6 +37,7 @@ object NavigationUtils {
             NavigationRouteName.MAIN_MY_PAGE -> MainNav.MyPage
             NavigationRouteName.SEARCH -> SearchNav
             NavigationRouteName.BASKET -> BasketNav
+            NavigationRouteName.PURCHASE_HISTORY -> PurchaseHistoryNav
 
 
             ProductDetailNav.routeWithArgName() -> CategoryNav
