@@ -127,4 +127,7 @@ dependencies {
 
     //kakao
     implementation("com.kakao.sdk:v2-user:2.19.0")
+
+    //coil
+    implementation("io.coil-kt:coil-compose:2.1.0")
 }
