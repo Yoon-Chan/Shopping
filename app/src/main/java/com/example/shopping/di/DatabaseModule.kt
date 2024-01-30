@@ -6,6 +6,7 @@ import com.example.data.db.ApplicationDatabase
 import com.example.data.db.dao.BasketDao
 import com.example.data.db.dao.LikeDao
 import com.example.data.db.dao.PurchaseDao
+import com.example.data.db.dao.PurchaseHistoryDao
 import com.example.data.db.dao.SearchDao
 import dagger.Module
 import dagger.Provides
@@ -51,5 +52,11 @@ object DatabaseModule {
     @Singleton
     fun providePurchaseDao(database: ApplicationDatabase): PurchaseDao {
         return database.purchaseDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePurchaseHistoryDao(database: ApplicationDatabase): PurchaseHistoryDao {
+        return database.purchaseHistoryDao()
     }
 }
