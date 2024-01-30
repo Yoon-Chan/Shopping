@@ -24,9 +24,10 @@ import com.example.shopping.model.CarouselVM
 import com.example.shopping.model.PresentationVM
 import com.example.shopping.model.ProductVM
 import com.example.shopping.model.RankingVM
+import com.example.shopping.ui.BasketNav
 import com.example.shopping.ui.CategoryNav
-import com.example.shopping.ui.NavigationItem
-import com.example.shopping.ui.NavigationRouteName
+import com.example.shopping.ui.ProductDetailNav
+import com.example.shopping.ui.SearchNav
 import com.example.shopping.utils.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,11 +65,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun openBasket(navHostController: NavHostController) {
-        NavigationUtils.navigate(navHostController, NavigationItem.BasketNav.route)
+        NavigationUtils.navigate(navHostController, BasketNav.route)
     }
 
     fun openSearchForm(navHostController: NavHostController) {
-        NavigationUtils.navigate(navHostController, NavigationRouteName.SEARCH)
+        NavigationUtils.navigate(navHostController,SearchNav.route)
     }
 
     fun updateColumnCount(count: Int) {
@@ -78,7 +79,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openProduct(navHostController: NavHostController,product: Product) {
-        NavigationUtils.navigate(navHostController, NavigationRouteName.PRODUCT_DETAIL, product)
+        NavigationUtils.navigate(navHostController, ProductDetailNav.navigateWithArg(product.productId))
     }
 
     override fun openBanner(bannerId: String) {
@@ -86,7 +87,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openCategory(navHostController: NavHostController, category: Category) {
-        NavigationUtils.navigatev2(navHostController, CategoryNav.navigateWithArg(category))
+        NavigationUtils.navigate(navHostController, CategoryNav.navigateWithArg(category))
     }
 
     private fun convertToPresentationVM(list: List<BaseModel>): List<PresentationVM<out BaseModel>> {

@@ -9,7 +9,7 @@ import com.example.domain.model.SearchKeyword
 import com.example.domain.usecase.SearchUseCase
 import com.example.shopping.delegate.ProductDelegate
 import com.example.shopping.model.ProductVM
-import com.example.shopping.ui.NavigationRouteName
+import com.example.shopping.ui.ProductDetailNav
 import com.example.shopping.utils.NavigationUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +65,7 @@ class SearchViewModel @Inject constructor(
 
 
     override fun openProduct(navHostController: NavHostController, product: Product) {
-        NavigationUtils.navigate(navHostController, NavigationRouteName.PRODUCT_DETAIL, product)
+        NavigationUtils.navigate(navHostController, ProductDetailNav.navigateWithArg(product.productId))
     }
 
     override fun likeProduct(product: Product) {
