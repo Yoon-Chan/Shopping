@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -20,8 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,14 +38,27 @@ import com.example.domain.model.BasketProduct
 import com.example.domain.model.Product
 import com.example.shopping.R
 import com.example.shopping.ui.component.Price
+import com.example.shopping.ui.popupSnackBar
 import com.example.shopping.ui.theme.Purple40
 import com.example.shopping.utils.NumberUtils
+import com.example.shopping.viewmodel.basket.BasketAction
+import com.example.shopping.viewmodel.basket.BasketEvent
 import com.example.shopping.viewmodel.basket.BasketViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun BasketScreen(viewModel: BasketViewModel = hiltViewModel()) {
+fun BasketScreen(scaffoldState: ScaffoldState,viewModel: BasketViewModel = hiltViewModel()) {
     val basketProducts by viewModel.basketProducts.collectAsState(initial = emptyList())
-
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit){
+        viewModel.eventFLow.collectLatest { event ->
+            when(event) {
+                is BasketEvent.ShowSnackBar -> {
+                    popupSnackBar(scope, scaffoldState, "결제 되었습니다.")
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,11 +71,11 @@ fun BasketScreen(viewModel: BasketViewModel = hiltViewModel()) {
         ) {
             items(basketProducts.size) { index ->
                 BasketProductCard(basketProduct = basketProducts[index]) {
-                    viewModel.removeBasketProduct(it)
+                    viewModel.dispatch(BasketAction.RemoveProduct(it))
                 }
             }
         }
-        Button(onClick = { /*TODO*/ },
+        Button(onClick = { viewModel.dispatch(BasketAction.CheckoutBasket(basketProducts)) },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Purple40)) {
                 Icon(Icons.Filled.Check, contentDescription = "CheckIcons")

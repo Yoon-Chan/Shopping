@@ -3,10 +3,15 @@ package com.example.shopping.ui
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +25,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -38,6 +44,8 @@ import com.example.shopping.ui.search.SearchScreen
 import com.example.shopping.utils.NavigationUtils
 import com.example.shopping.viewmodel.MainViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 //sealed class MainNavigationItem(val route: String, val name: String, val icon: ImageVector) {
 //    data object Main : MainNavigationItem("MainNav", "MainNav", Icons.Default.Home)
@@ -60,6 +68,7 @@ fun HomeScreen(googleSignInClient: GoogleSignInClient, viewModel: MainViewModel 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val scaffoldState = rememberScaffoldState()
     Scaffold(
         topBar = {
             MainHeader(navController, viewModel, currentRoute)
@@ -69,10 +78,19 @@ fun HomeScreen(googleSignInClient: GoogleSignInClient, viewModel: MainViewModel 
                 MainBottomNavigationBar(navController, currentRoute)
             }
 
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = scaffoldState.snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    modifier = Modifier.padding(50.dp),
+                    shape = RoundedCornerShape(10.dp)
+                )
+            }
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            MainNavigationScreen(viewModel, navController, googleSignInClient)
+            MainNavigationScreen(viewModel, navController, googleSignInClient, scaffoldState)
         }
     }
 }
@@ -151,7 +169,8 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
 fun MainNavigationScreen(
     viewModel: MainViewModel,
     navController: NavHostController,
-    googleSignInClient: GoogleSignInClient
+    googleSignInClient: GoogleSignInClient,
+    scaffoldState : ScaffoldState
 ) {
     NavHost(navController = navController, startDestination = MainNav.Home.route) {
         composable(MainNav.Home.route, deepLinks = MainNav.Home.deepLinks) {
@@ -160,8 +179,12 @@ fun MainNavigationScreen(
         composable(MainNav.Category.route, deepLinks = MainNav.Category.deepLinks) {
             MainCategoryScreen(viewModel = viewModel, navController = navController)
         }
-        composable(MainNav.MyPage.route,deepLinks = MainNav.MyPage.deepLinks) {
-            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient, navController)
+        composable(MainNav.MyPage.route, deepLinks = MainNav.MyPage.deepLinks) {
+            MyPageScreen(
+                viewModel = viewModel,
+                googleSignInClient = googleSignInClient,
+                navController
+            )
         }
         composable(MainNav.Like.route, deepLinks = MainNav.Like.deepLinks) {
             LikeScreen(navHostController = navController, viewModel = viewModel)
@@ -172,7 +195,6 @@ fun MainNavigationScreen(
             arguments = CategoryNav.arguments,
             deepLinks = CategoryNav.deepLinks
         ) {
-            val categoryString = it.arguments?.getString("category")
             val category = CategoryNav.findArgument(it)
             if (category != null) {
                 CategoryScreen(navHostController = navController, category = category)
@@ -195,11 +217,17 @@ fun MainNavigationScreen(
             SearchScreen(navHostController = navController)
         }
         composable(BasketNav.route, deepLinks = BasketNav.deepLinks) {
-            BasketScreen()
+            BasketScreen(scaffoldState)
         }
-        composable(PurchaseHistoryNav.route, deepLinks = PurchaseHistoryNav.deepLinks){
+        composable(PurchaseHistoryNav.route, deepLinks = PurchaseHistoryNav.deepLinks) {
             PurchaseHistoryScreen()
         }
     }
+}
 
+fun popupSnackBar(scope: CoroutineScope, scaffoldState: ScaffoldState, message: String, onDismissCallback: () -> Unit = {}){
+    scope.launch {
+        scaffoldState.snackbarHostState.showSnackbar(message)
+        onDismissCallback.invoke()
+    }
 }
