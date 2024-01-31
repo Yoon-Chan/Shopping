@@ -1,4 +1,5 @@
 # Shopping
+__노션__ : https://www.notion.so/with-compose-b63b638778a542f08440ea7e14b0831f
 쇼핑몰 클린 아키텍처
 
 # 앱 기능 구현
